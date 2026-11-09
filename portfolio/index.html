@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alan Axel | Développeur web </title>
+  <meta name="description" content="Portfolio d'Alan Axel, développeur web à Abidjan. HTML, CSS, JavaScript, PHP, SQL, Git, GitHub et IA.">
+  <meta name="theme-color" content="#0F2A2B">
+  <meta property="og:title" content="Alan Axel | Développeur web ">
+  <meta property="og:description" content="HTML, CSS, JavaScript, PHP, SQL, Git, GitHub et IA. Du navigateur à la base de données.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    document.documentElement.classList.add('js');
+    // Filet de sécurité : si le script principal ne démarre jamais, on retire l'écran de chargement.
+    setTimeout(function () {
+      var l = document.querySelector('.loader');
+      if (l) l.style.display = 'none';
+      document.documentElement.classList.remove('is-loading');
+    }, 9000);
+  </script>
+  <noscript><style>.js [data-intro], .js .hero__line { opacity: 1 !important; }</style></noscript>
+</head>
+<body id="top">
+  <div class="loader" aria-hidden="true">
+    <div class="loader__top">
+      <p class="loader__name"><svg class="logo logo--loader" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></p>
+      <p class="loader__role">Développeur web, Abidjan</p>
+    </div>
+    <div class="loader__bottom">
+      <p class="loader__count"><span class="loader__num">0</span><span class="loader__pct">%</span></p>
+      <div class="loader__bar"><span class="loader__fill"></span></div>
+    </div>
+  </div>
+
+  <a class="skip" href="#competences">Aller au contenu</a>
+
+  <header class="nav" data-intro>
+    <a class="nav__brand" href="#top" aria-label="Alan Axel, retour en haut"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></a>
+    <nav aria-label="Navigation principale">
+      <ul class="nav__links">
+        <li><a href="#competences">Compétences</a></li>
+        <li><a href="#trajet">Trajet</a></li>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-label="Présentation">
+      <div class="hero__inner">
+        <h1 class="hero__name" aria-label="Alan Axel">
+          <span class="hero__line" data-split aria-hidden="true">Alan</span>
+          <span class="hero__line" data-split aria-hidden="true">Axel</span>
+        </h1>
+
+        <div class="hero__bottom">
+          <div class="hero__pitch" data-intro>
+            <p class="hero__lead">Développeur web à Abidjan. Je relie ce qu'on voit à l'écran à ce qui est stocké en base de données.</p>
+            <div class="hero__actions">
+              <a class="btn" href="#competences">Voir mes compétences</a>
+              <a class="link" href="#contact">Me contacter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPÉTENCES -->
+    <section class="skills section" id="competences" aria-labelledby="skills-title">
+      <div class="skills__inner">
+        <div class="skills__head">
+          <h2 class="title" id="skills-title">Les outils que j'utilise</h2>
+          <p class="skills__intro">Huit outils pour construire un site du navigateur jusqu'à la base de données, garder la trace de chaque modification et gagner du temps avec l'IA.</p>
+        </div>
+
+        <div class="group">
+          <h3 class="group__title">Interface</h3>
+          <ul class="techs">
+            <li class="tech tech--html" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
+              <span class="tech__name">HTML</span>
+              <span class="tech__desc">Pages structurées et accessibles.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+            <li class="tech tech--css" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4C6 4 7 8 7 10s-1 2-3 2c2 0 3 0 3 2s-1 6 2 6M15 4c3 0 2 4 2 6s1 2 3 2c-2 0-3 0-3 2s1 6-2 6"/></svg></span>
+              <span class="tech__name">CSS</span>
+              <span class="tech__desc">Mises en page responsives avec Flexbox et Grid.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+            <li class="tech tech--js" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><span class="tech__glyph">JS</span></span>
+              <span class="tech__name">JavaScript</span>
+              <span class="tech__desc">Interactions, formulaires et appels à des API.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3 class="group__title">Serveur et données</h3>
+          <ul class="techs">
+            <li class="tech tech--php" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><span class="tech__glyph tech__glyph--php">php</span></span>
+              <span class="tech__name">PHP</span>
+              <span class="tech__desc">Traitement des formulaires côté serveur.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+            <li class="tech tech--sql" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span>
+              <span class="tech__name">SQL</span>
+              <span class="tech__desc">Tables, jointures et requêtes de données.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3 class="group__title">Suivi du code</h3>
+          <ul class="techs">
+            <li class="tech tech--git" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 21.5 12 12 21.5 2.5 12Z"/><circle cx="9.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="9.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="14.5" cy="12" r="1.3" fill="currentColor"/><path d="M9.5 10v4M9.5 10c0 1.5 2 2 5 2"/></svg></span>
+              <span class="tech__name">Git</span>
+              <span class="tech__desc">Historique du code et travail par branches.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+            <li class="tech tech--github" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M6 8.2v7.6M18 15.8V10a3 3 0 0 0-3-3h-3m0 0 2.2-2.2M12 7l2.2 2.2"/></svg></span>
+              <span class="tech__name">GitHub</span>
+              <span class="tech__desc">Dépôts, pull requests et relectures.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h3 class="group__title">Intelligence artificielle</h3>
+          <ul class="techs">
+            <li class="tech tech--ia" tabindex="0">
+              <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5 12 9l5.5 2L12 13l-2 5.5L8 13l-5.5-2L8 9Z"/><path d="M18.5 3v4M16.5 5h4M18.5 16v5M16 18.5h5"/></svg></span>
+              <span class="tech__name">IA</span>
+              <span class="tech__desc">Assistants pour coder, déboguer et apprendre. Je relis toujours le résultat.</span>
+              <span class="tech__dot" aria-hidden="true"></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- DU CLIC À LA BASE DE DONNÉES -->
+    <section class="flow section" id="trajet" aria-labelledby="flow-title">
+      <div class="section__inner">
+        <div class="flow__head">
+          <h2 class="title" id="flow-title">Du clic à la base de données</h2>
+          <p class="lede">Chaque formulaire d'un site fait le même voyage. Voici le trajet d'une donnée, aller et retour, que je construis de bout en bout.</p>
+        </div>
+
+        <div class="flow__layout flow__diagram">
+          <div class="fviz-wrap">
+            <svg class="fviz" viewBox="0 0 120 600" role="img" aria-label="Schéma vertical : la donnée part du formulaire, passe par JavaScript puis PHP, arrive dans la base SQL, et la réponse remonte jusqu'au formulaire.">
+              <path class="fviz__out" pathLength="1" d="M30 30V570"/>
+              <path class="fviz__back" pathLength="1" d="M30 570C150 570 150 30 30 30"/>
+              <circle class="fring" cx="30" cy="30" r="11"/>
+              <circle class="fring" cx="30" cy="210" r="11"/>
+              <circle class="fring" cx="30" cy="390" r="11"/>
+              <circle class="fring" cx="30" cy="570" r="11"/>
+              <circle class="fdot is-on" cx="30" cy="30" r="11"/>
+              <circle class="fdot is-on" cx="30" cy="210" r="11"/>
+              <circle class="fdot is-on" cx="30" cy="390" r="11"/>
+              <circle class="fdot is-on" cx="30" cy="570" r="11"/>
+              <circle class="fviz__trail" cx="30" cy="30" r="6"/>
+              <circle class="fviz__trail" cx="30" cy="30" r="5"/>
+              <circle class="fviz__trail" cx="30" cy="30" r="4"/>
+              <circle class="fviz__trail" cx="30" cy="30" r="3"/>
+              <circle class="fviz__halo" cx="30" cy="30" r="17"/>
+              <circle class="fviz__packet" cx="30" cy="30" r="8"/>
+            </svg>
+            <ul class="flabels" aria-hidden="true">
+              <li class="flabel is-on" style="top:5%">Formulaire</li>
+              <li class="flabel is-on" style="top:35%">JavaScript</li>
+              <li class="flabel is-on" style="top:65%">PHP</li>
+              <li class="flabel is-on" style="top:95%">SQL</li>
+            </ul>
+          </div>
+
+          <ol class="fsteps">
+            <li class="fstep is-on">
+              <h3>Un formulaire</h3>
+              <p>Le visiteur remplit des champs. HTML les structure, CSS les met en forme.</p>
+            </li>
+            <li class="fstep is-on">
+              <h3>JavaScript envoie</h3>
+              <p>Le script vérifie les champs et envoie la demande, sans recharger la page.</p>
+            </li>
+            <li class="fstep is-on">
+              <h3>PHP contrôle</h3>
+              <p>Le serveur revalide tout, puis prépare une requête sécurisée.</p>
+            </li>
+            <li class="fstep is-on">
+              <h3>SQL enregistre</h3>
+              <p>La base garde ou retrouve les lignes demandées, avec des jointures si besoin.</p>
+            </li>
+            <li class="fstep fstep--return is-on">
+              <h3>Le retour</h3>
+              <p>La réponse fait le chemin inverse : PHP la renvoie, JavaScript met l'écran à jour.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJETS -->
+    <section class="work section" id="projets" aria-labelledby="work-title">
+      <div class="section__inner">
+        <h2 class="title" id="work-title">Projets</h2>
+        <p class="lede">Le premier projet, c'est ce site. Le gestionnaire de tâches arrive ensuite, avec le code sur GitHub.</p>
+
+        <!-- À MODIFIER : ajoute tes vrais projets quand ils existent. -->
+        <ul class="work__list">
+          <li class="work__row">
+            <h3 class="work__title">Ce portfolio</h3>
+            <p class="work__stack">HTML, CSS, JavaScript, GSAP, Vercel</p>
+            <p class="work__status work__status--live">En ligne</p>
+          </li>
+          <li class="work__row">
+            <h3 class="work__title">Gestionnaire de tâches</h3>
+            <p class="work__stack">PHP, SQL, JavaScript, GSAP</p>
+            <p class="work__status work__status--soon">À venir</p>
+            <button class="work__btn" type="button" disabled aria-label="Voir un aperçu de Gestionnaire de tâches (bientôt disponible)" data-hint="Bientôt disponible">Voir un aperçu</button>
+          </li>
+          <li class="work__row">
+            <h3 class="work__title">Mini-blog avec administration</h3>
+            <p class="work__stack">PHP, SQL, Git</p>
+            <p class="work__status work__status--soon">À venir</p>
+            <button class="work__btn" type="button" disabled aria-label="Voir un aperçu de Mini-blog avec administration (bientôt disponible)" data-hint="Bientôt disponible">Voir un aperçu</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section" id="contact" aria-labelledby="contact-title">
+      <div class="section__inner">
+        <h2 class="title title--xl" id="contact-title">Parlons de votre projet.</h2>
+        <p class="lede">Une offre, une mission, une question : écrivez-moi, je réponds vite.</p>
+        <!-- À MODIFIER : remplace 225XXXXXXXXXX par ton numéro WhatsApp, au format international, sans « + », sans espaces ni tirets (ex. : 225 + ton numéro). -->
+        <ul class="contact__links">
+          <li>
+            <a class="contact__btn" href="mailto:gnohohiaxel@gmail.com?subject=Contact%20depuis%20votre%20portfolio" aria-label="M'envoyer un mail">
+              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/><path d="m3 7 9 6 9-6"/></svg>
+              <span>Par mail</span>
+            </a>
+          </li>
+          <li>
+            <a class="contact__btn" href="https://github.com/AlanAxel26" target="_blank" rel="noopener noreferrer" aria-label="Voir mon profil GitHub">
+              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+              <span>GitHub</span>
+            </a>
+          </li>
+          <li>
+            <a class="contact__btn" href="https://wa.me/225XXXXXXXXXX?text=Bonjour%20Alan%2C%20je%20vous%20contacte%20depuis%20votre%20portfolio." target="_blank" rel="noopener noreferrer" aria-label="M'écrire sur WhatsApp">
+              <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
+              <span>WhatsApp</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year">2026</span> Alan Axel Logbo Gnohohi. Abidjan, Côte d'Ivoire.</p>
+    <p>Écrit à la main en HTML, CSS et JavaScript.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
