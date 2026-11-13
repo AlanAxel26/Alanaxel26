@@ -1,8 +1,14 @@
+// SCRIPT PRINCIPAL DU PORTFOLIO
+// Ordre des animations : 0) écran de chargement, 1) entrée du nom, 2) compétences, 3) trajet d'un clic.
+// Sans GSAP ou avec « mouvement réduit », rien ne s'anime et tout reste lisible.
 (() => {
+  // Tout le code est enfermé dans une fonction qui s'exécute seule : les variables restent privées.
   'use strict';
 
+  // root = la balise <html>. On lui ajoute des classes (no-motion, is-loading) que le CSS utilise.
   const root = document.documentElement;
 
+  // Met l'année en cours dans le pied de page.
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
@@ -13,8 +19,10 @@
     return;
   }
 
+  // Active le plugin ScrollTrigger (animations liées au défilement).
   gsap.registerPlugin(ScrollTrigger);
 
+  // Lit une variable CSS, par exemple css('--accent'), pour réutiliser les couleurs du site.
   const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
 
   /* ------------------------------------------------------------
@@ -22,6 +30,7 @@
         puis le reste apparaît.
      ------------------------------------------------------------ */
   function heroIntro() {
+    // Découpe le texte de chaque ligne en lettres (<span class="ch">) pour pouvoir les animer une par une.
     document.querySelectorAll('[data-split]').forEach((line) => {
       const text = line.textContent;
       line.textContent = '';
@@ -33,8 +42,11 @@
       });
     });
 
+    // Rend les lignes visibles (le CSS les cache au départ).
     gsap.set('.hero__line', { autoAlpha: 1 });
 
+    // Animation en deux temps : 1) les lettres montent l'une après l'autre ; 2) le reste (menu, phrase, boutons) apparaît en fondu.
+    // '-=0.55' = la 2e animation commence un peu avant la fin de la 1re.
     gsap.timeline({ defaults: { ease: 'power4.out' } })
       .from('.hero__line .ch', { yPercent: 110, duration: 1.1, stagger: 0.07 })
       .fromTo(
@@ -51,19 +63,24 @@
         et l'entrée du hero démarre juste derrière.
      ------------------------------------------------------------ */
   function runLoader(onExit) {
+    // Si l'écran de chargement n'existe pas, on lance directement la suite.
     const panel = document.querySelector('.loader');
     if (!panel) { onExit(); return; }
 
+    // Les deux éléments à mettre à jour : le nombre et la barre. state.v = pourcentage actuel (0 à 100).
     const num = panel.querySelector('.loader__num');
     const fill = panel.querySelector('.loader__fill');
     const state = { v: 0 };
+    // Affiche le pourcentage actuel dans le texte et dans la barre.
     const render = () => {
       num.textContent = Math.round(state.v);
       fill.style.transform = 'scaleX(' + state.v / 100 + ')';
     };
 
+    // Bloque le défilement pendant le chargement (voir le CSS).
     root.classList.add('is-loading');
 
+    // Une promesse = « quelque chose qui sera prêt plus tard ». Ici : la page ET les polices sont chargées.
     const pageReady = new Promise((resolve) => {
       const done = () => resolve();
       if (document.readyState === 'complete') done();
@@ -76,10 +93,12 @@
       new Promise((resolve) => setTimeout(resolve, 4500)),
     ]);
 
+    // Le compteur monte d'abord jusqu'à 85 % en 1,4 seconde.
     const climb = new Promise((resolve) => {
       gsap.to(state, { v: 85, duration: 1.4, ease: 'power2.out', onUpdate: render, onComplete: resolve });
     });
 
+    // Quand la page est prête ET que le compteur a atteint 85 %, on termine jusqu'à 100 % puis on sort.
     Promise.all([waitAtMost, climb]).then(() => {
       gsap.to(state, {
         v: 100,
@@ -90,6 +109,7 @@
       });
     });
 
+    // Sortie : le texte monte et disparaît, le panneau glisse vers le haut, puis l'animation du hero démarre (onExit).
     function exit() {
       root.classList.remove('is-loading');
       gsap.timeline()
@@ -109,6 +129,7 @@
         (Le survol coloré est en CSS.)
      ------------------------------------------------------------ */
   function skillsReveal() {
+    // Pour chaque groupe, ses lignes arrivent l'une après l'autre (stagger) quand il entre à l'écran. once: true = une seule fois.
     gsap.utils.toArray('.group').forEach((group) => {
       gsap.from(group.querySelectorAll('.tech'), {
         autoAlpha: 0,
@@ -132,6 +153,7 @@
     const wrap = document.querySelector('.flow__diagram');
     if (!wrap) return;
 
+    // On récupère les éléments du schéma (dessinés dans index.html).
     const out = wrap.querySelector('.fviz__out');
     const back = wrap.querySelector('.fviz__back');
     const packet = wrap.querySelector('.fviz__packet');
@@ -143,10 +165,14 @@
     const labels = gsap.utils.toArray('.flabel', wrap);
 
     const OUT_SHARE = 0.75;                       // part du défilement pour l'aller
+    // Longueurs réelles des deux tracés : elles servent à placer le point dessus.
     const lenOut = out.getTotalLength();
     const lenBack = back.getTotalLength();
+    // clamp(v) force une valeur à rester entre 0 et 1.
     const clamp = (v) => Math.min(1, Math.max(0, v));
+    // reachAt[i] = progression (0 à 1) à partir de laquelle le point numéro i est « atteint ».
     const reachAt = dots.map((_, i) => (i / (dots.length - 1)) * OUT_SHARE);
+    // Au-delà de cette progression, on considère que la réponse est revenue au formulaire.
     const DONE_AT = 0.985;
 
     // Position du point sur le tracé (aller puis retour) pour une progression p.
@@ -170,6 +196,8 @@
     const wasOn = dots.map(() => false);
     let wasDone = false;
 
+    // render(p) dessine tout le schéma pour une progression p (0 = début, 1 = fin).
+    // Elle est appelée à chaque mouvement de défilement.
     const render = (p) => {
       const tOut = clamp(p / OUT_SHARE);
       const tBack = clamp((p - OUT_SHARE) / (1 - OUT_SHARE));
@@ -212,11 +240,14 @@
       wasDone = done;
     };
 
+    // « Armé » : le CSS peut maintenant atténuer ce qui n'est pas encore atteint.
     wrap.classList.add('is-armed');
     const state = { p: 0 };
     render(0);
     fx = true;
 
+    // Relie la progression p au défilement : elle passe de 0 à 1 pendant que la liste des étapes défile.
+    // scrub: 1 = l'animation suit le défilement, avec un peu d'inertie.
     gsap.to(state, {
       p: 1,
       ease: 'none',
@@ -224,6 +255,7 @@
       scrollTrigger: { trigger: wrap.querySelector('.fsteps'), start: 'top 60%', end: 'bottom bottom', scrub: 1 },
     });
 
+    // Utilisée par degrade() : affiche le schéma complet, sans animation.
     flowFinish = () => {
       fx = false;
       render(1);
@@ -237,8 +269,10 @@
      on garde l'entrée animée et le reste reste statique et lisible.
      ------------------------------------------------------------ */
   let degraded = false;
+  // « Plat » = la page n'est pas plus haute que l'écran (ex. aperçu dans un cadre) : le défilement ne peut pas piloter l'animation.
   const isFlat = () => root.scrollHeight <= window.innerHeight * 1.15;
 
+  // Mode simplifié : on supprime les animations liées au défilement et on affiche tout.
   const degrade = () => {
     if (degraded) return;
     degraded = true;
@@ -247,6 +281,7 @@
     if (flowFinish) flowFinish();
   };
 
+  // Installe les animations liées au défilement (compétences et trajet).
   const setup = () => {
     if (isFlat()) { degrade(); return; }
     skillsReveal();
@@ -258,8 +293,10 @@
     });
   };
 
+  // Démarrage : l'écran de chargement d'abord ; quand il a fini, l'animation du hero démarre.
   runLoader(heroIntro);
 
+  // On installe le reste une fois la page chargée (petit délai pour laisser la mise en page se stabiliser).
   if (document.readyState === 'complete') setTimeout(setup, 400);
   else window.addEventListener('load', () => setTimeout(setup, 400));
 

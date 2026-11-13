@@ -9,7 +9,6 @@ Le logo (un A dont la barre finit par un point, comme une branche Git) est dessi
 
 Dans `index.html`, cherche les commentaires `À MODIFIER` :
 
-- remplace `225XXXXXXXXXX` dans le lien WhatsApp de la section Contact par ton numéro, au format international, sans `+` ni espaces (`225` suivi de ton numéro),
 - quand le gestionnaire de tâches a un aperçu en ligne, transforme son bouton « Voir un aperçu » en lien : remplace `<button ... disabled>` par `<a href="ton-lien">` et passe « À venir » en « En ligne ». Fais pareil pour le mini-blog.
 
 ## Tester en local

@@ -3,19 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alan Axel | Développeur web </title>
+  <!-- GUIDE DU FICHIER
+       index.html = le contenu (textes, sections). style.css = la mise en forme. script.js = les animations.
+       Pour changer un texte : cherche-le ici et modifie-le directement. -->
+  <title>Alan Axel | Développeur web à Abidjan</title>
   <meta name="description" content="Portfolio d'Alan Axel, développeur web à Abidjan. HTML, CSS, JavaScript, PHP, SQL, Git, GitHub et IA.">
+  <!-- Couleur de la barre du navigateur sur téléphone. -->
   <meta name="theme-color" content="#0F2A2B">
-  <meta property="og:title" content="Alan Axel | Développeur web ">
+  <!-- Aperçu quand on partage le lien (WhatsApp, réseaux sociaux...). -->
+  <meta property="og:title" content="Alan Axel | Développeur web à Abidjan">
   <meta property="og:description" content="HTML, CSS, JavaScript, PHP, SQL, Git, GitHub et IA. Du navigateur à la base de données.">
   <meta property="og:type" content="website">
+  <!-- Petite icône de l'onglet du navigateur. -->
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
+  <!-- Polices Google Fonts : le navigateur se connecte tôt pour les charger plus vite. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <!-- Notre feuille de style : toute la mise en forme du site. -->
   <link rel="stylesheet" href="style.css">
 
+  <!-- Ajoute la classe « js » à la page : le CSS sait ainsi que JavaScript fonctionne. -->
   <script>
     document.documentElement.classList.add('js');
     // Filet de sécurité : si le script principal ne démarre jamais, on retire l'écran de chargement.
@@ -25,9 +34,11 @@
       document.documentElement.classList.remove('is-loading');
     }, 9000);
   </script>
+  <!-- Si JavaScript est désactivé, on rend visibles les éléments que le CSS cache avant leur animation. -->
   <noscript><style>.js [data-intro], .js .hero__line { opacity: 1 !important; }</style></noscript>
 </head>
 <body id="top">
+  <!-- ÉCRAN DE CHARGEMENT : logo, rôle et compteur de 0 à 100 %. Il est animé par script.js, puis il glisse vers le haut. -->
   <div class="loader" aria-hidden="true">
     <div class="loader__top">
       <p class="loader__name"><svg class="logo logo--loader" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></p>
@@ -39,8 +50,11 @@
     </div>
   </div>
 
+  <!-- Lien d'accessibilité : permet au clavier de sauter directement au contenu. -->
   <a class="skip" href="#competences">Aller au contenu</a>
 
+  <!-- NAVIGATION : logo à gauche, liens vers les sections à droite.
+       data-intro = cet élément apparaît en fondu quand la page démarre. -->
   <header class="nav" data-intro>
     <a class="nav__brand" href="#top" aria-label="Alan Axel, retour en haut"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></a>
     <nav aria-label="Navigation principale">
@@ -54,9 +68,11 @@
   </header>
 
   <main>
-    <!-- HERO -->
+    <!-- HERO : ce qu'on voit en premier. Ton nom en grand, la phrase de présentation et les deux boutons. -->
     <section class="hero" aria-label="Présentation">
       <div class="hero__inner">
+        <!-- Le nom est découpé lettre par lettre par script.js (data-split) pour l'animation.
+             aria-label garde le nom lisible pour les lecteurs d'écran. -->
         <h1 class="hero__name" aria-label="Alan Axel">
           <span class="hero__line" data-split aria-hidden="true">Alan</span>
           <span class="hero__line" data-split aria-hidden="true">Axel</span>
@@ -74,7 +90,7 @@
       </div>
     </section>
 
-    <!-- COMPÉTENCES -->
+    <!-- COMPÉTENCES : 4 groupes d'outils sur fond sombre. Pour ajouter une compétence, copie un bloc <li class="tech ..."> et ajoute sa couleur dans style.css (.tech--nom). -->
     <section class="skills section" id="competences" aria-labelledby="skills-title">
       <div class="skills__inner">
         <div class="skills__head">
@@ -85,6 +101,8 @@
         <div class="group">
           <h3 class="group__title">Interface</h3>
           <ul class="techs">
+            <!-- Une compétence = une ligne <li>. « tech--html » choisit la couleur du survol (réglée dans style.css).
+                 tabindex="0" permet de la sélectionner au clavier. -->
             <li class="tech tech--html" tabindex="0">
               <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
               <span class="tech__name">HTML</span>
@@ -156,7 +174,7 @@
       </div>
     </section>
 
-    <!-- DU CLIC À LA BASE DE DONNÉES -->
+    <!-- DU CLIC À LA BASE DE DONNÉES : schéma collé à gauche qui s'anime pendant que les étapes défilent à droite. L'animation est dans script.js (flowDiagram). -->
     <section class="flow section" id="trajet" aria-labelledby="flow-title">
       <div class="section__inner">
         <div class="flow__head">
@@ -167,16 +185,21 @@
         <div class="flow__layout flow__diagram">
           <div class="fviz-wrap">
             <svg class="fviz" viewBox="0 0 120 600" role="img" aria-label="Schéma vertical : la donnée part du formulaire, passe par JavaScript puis PHP, arrive dans la base SQL, et la réponse remonte jusqu'au formulaire.">
+              <!-- Le trait de l'aller (vertical) puis celui du retour (la courbe à droite).
+                   pathLength="1" permet au script de les tracer progressivement. -->
               <path class="fviz__out" pathLength="1" d="M30 30V570"/>
               <path class="fviz__back" pathLength="1" d="M30 570C150 570 150 30 30 30"/>
+              <!-- Anneaux : l'onde qui s'écarte quand le point voyageur atteint une étape. -->
               <circle class="fring" cx="30" cy="30" r="11"/>
               <circle class="fring" cx="30" cy="210" r="11"/>
               <circle class="fring" cx="30" cy="390" r="11"/>
               <circle class="fring" cx="30" cy="570" r="11"/>
+              <!-- Les 4 points des étapes : Formulaire, JavaScript, PHP, SQL. -->
               <circle class="fdot is-on" cx="30" cy="30" r="11"/>
               <circle class="fdot is-on" cx="30" cy="210" r="11"/>
               <circle class="fdot is-on" cx="30" cy="390" r="11"/>
               <circle class="fdot is-on" cx="30" cy="570" r="11"/>
+              <!-- Traînée et halo derrière le point voyageur, puis le point lui-même. -->
               <circle class="fviz__trail" cx="30" cy="30" r="6"/>
               <circle class="fviz__trail" cx="30" cy="30" r="5"/>
               <circle class="fviz__trail" cx="30" cy="30" r="4"/>
@@ -184,6 +207,7 @@
               <circle class="fviz__halo" cx="30" cy="30" r="17"/>
               <circle class="fviz__packet" cx="30" cy="30" r="8"/>
             </svg>
+            <!-- Noms des étapes à côté des points (cachés sur mobile). top = position verticale en %. -->
             <ul class="flabels" aria-hidden="true">
               <li class="flabel is-on" style="top:5%">Formulaire</li>
               <li class="flabel is-on" style="top:35%">JavaScript</li>
@@ -192,6 +216,7 @@
             </ul>
           </div>
 
+          <!-- Les étapes, à droite : c'est ce texte qui défile pendant que le schéma reste en place. -->
           <ol class="fsteps">
             <li class="fstep is-on">
               <h3>Un formulaire</h3>
@@ -209,6 +234,7 @@
               <h3>SQL enregistre</h3>
               <p>La base garde ou retrouve les lignes demandées, avec des jointures si besoin.</p>
             </li>
+            <!-- Dernière étape : le retour de la réponse (la courbe du schéma). -->
             <li class="fstep fstep--return is-on">
               <h3>Le retour</h3>
               <p>La réponse fait le chemin inverse : PHP la renvoie, JavaScript met l'écran à jour.</p>
@@ -218,23 +244,25 @@
       </div>
     </section>
 
-    <!-- PROJETS -->
+    <!-- PROJETS : une ligne par projet (titre, technologies, statut, bouton). -->
     <section class="work section" id="projets" aria-labelledby="work-title">
       <div class="section__inner">
         <h2 class="title" id="work-title">Projets</h2>
         <p class="lede">Le premier projet, c'est ce site. Le gestionnaire de tâches arrive ensuite, avec le code sur GitHub.</p>
 
-        <!-- À MODIFIER : ajoute tes vrais projets quand ils existent. -->
+        <!-- À MODIFIER : quand un projet est en ligne, change « À venir » en « En ligne » (classe work__status--live) et remplace le bouton désactivé par un lien. -->
         <ul class="work__list">
           <li class="work__row">
             <h3 class="work__title">Ce portfolio</h3>
-            <p class="work__stack">HTML, CSS, JavaScript, GSAP, Vercel</p>
+            <p class="work__stack">HTML, CSS, JavaScript, GSAP</p>
             <p class="work__status work__status--live">En ligne</p>
           </li>
           <li class="work__row">
             <h3 class="work__title">Gestionnaire de tâches</h3>
             <p class="work__stack">PHP, SQL, JavaScript, GSAP</p>
             <p class="work__status work__status--soon">À venir</p>
+            <!-- Bouton désactivé (disabled) : on ne peut pas cliquer pour l'instant.
+                 Quand l'aperçu existe : remplace-le par <a class="work__btn" href="LIEN">Voir un aperçu</a>. -->
             <button class="work__btn" type="button" disabled aria-label="Voir un aperçu de Gestionnaire de tâches (bientôt disponible)" data-hint="Bientôt disponible">Voir un aperçu</button>
           </li>
           <li class="work__row">
@@ -247,26 +275,29 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT : titre et trois boutons (mail, GitHub, WhatsApp). -->
     <section class="contact section" id="contact" aria-labelledby="contact-title">
       <div class="section__inner">
         <h2 class="title title--xl" id="contact-title">Parlons de votre projet.</h2>
         <p class="lede">Une offre, une mission, une question : écrivez-moi, je réponds vite.</p>
-        <!-- À MODIFIER : remplace 225XXXXXXXXXX par ton numéro WhatsApp, au format international, sans « + », sans espaces ni tirets (ex. : 225 + ton numéro). -->
+        <!-- Le numéro WhatsApp est dans le lien wa.me ci-dessous (indicatif 225 + numéro, sans « + » ni espaces). -->
         <ul class="contact__links">
           <li>
+            <!-- Par mail : ouvre la messagerie du visiteur. L'adresse n'est plus affichée sur la page. -->
             <a class="contact__btn" href="mailto:gnohohiaxel@gmail.com?subject=Contact%20depuis%20votre%20portfolio" aria-label="M'envoyer un mail">
               <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/><path d="m3 7 9 6 9-6"/></svg>
               <span>Par mail</span>
             </a>
           </li>
           <li>
+            <!-- GitHub : ouvre ton profil dans un nouvel onglet (rel="noopener" par sécurité). -->
             <a class="contact__btn" href="https://github.com/AlanAxel26" target="_blank" rel="noopener noreferrer" aria-label="Voir mon profil GitHub">
               <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
               <span>GitHub</span>
             </a>
           </li>
           <li>
+            <!-- WhatsApp : ouvre une conversation avec le numéro, message déjà écrit (le texte après « text= »). -->
             <a class="contact__btn" href="https://wa.me/2250767710338?text=Bonjour%20Alan%2C%20je%20vous%20contacte%20depuis%20votre%20portfolio." target="_blank" rel="noopener noreferrer" aria-label="M'écrire sur WhatsApp">
               <svg class="contact__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
               <span>WhatsApp</span>
@@ -277,10 +308,14 @@
     </section>
   </main>
 
+  <!-- PIED DE PAGE : l'année est mise à jour automatiquement par script.js. -->
   <footer class="footer">
-    <p>© <span id="year">2026</span> Alan Axel Logbo Gnohohi. Tous droits réservés. Abidjan, Côte d'Ivoire.</p>
+    <p>© <span id="year">2026</span> Alan Axel Gnohohi. Tous droits réservés.</p>
+    <p>Abidjan, Côte d'Ivoire.</p>
   </footer>
 
+  <!-- Scripts en bas de page : GSAP (animations), ScrollTrigger (animations au défilement), puis script.js.
+       defer = chargés sans bloquer l'affichage, et exécutés dans cet ordre. -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="script.js" defer></script>

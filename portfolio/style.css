@@ -8,6 +8,7 @@
 :root {
   color-scheme: light dark;
 
+  /* Thème clair : fond, texte, texte secondaire, traits fins et couleur d'accent (orange). */
   --bg: #EDF1EF;
   --ink: #0F2A2B;
   --muted: #4A6361;
@@ -15,23 +16,28 @@
   --accent: #C2410C;
   --code-bg: color-mix(in srgb, var(--ink) 8%, transparent);
 
-  /* Section "requête" : toujours sombre */
+  /* Sections toujours sombres (écran de chargement et compétences), même en thème clair */
   --pipe-bg: #0F2A2B;
   --pipe-ink: #E7EFEC;
   --pipe-muted: #9DB6B1;
   --pipe-rule: #2E4C4A;
   --pipe-accent: #FB923C;
 
+  /* Polices : titres, texte courant, code. */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Hanken Grotesk", system-ui, sans-serif;
   --font-code: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
+  /* Marges sur les côtés : --gutter s'adapte à la largeur de l'écran.
+     --pad-l et --pad-r évitent en plus l'encoche des téléphones. --max = largeur maximale du contenu.
+  */
   --gutter: clamp(1.25rem, 5vw, 4rem);
   --pad-l: max(var(--gutter), env(safe-area-inset-left, 0px));
   --pad-r: max(var(--gutter), env(safe-area-inset-right, 0px));
   --max: 80rem;
 }
 
+/* Thème sombre : activé automatiquement si l'appareil est en mode sombre. On ne change que les variables. */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0A1A1B;
@@ -43,6 +49,7 @@
   }
 }
 
+/* Réglage de base : la largeur d'un bloc inclut ses marges internes, ce qui simplifie les calculs. */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -61,11 +68,13 @@ body {
 
 a { color: inherit; }
 
+/* Contour orange visible quand on navigue au clavier (accessibilité). */
 :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 
+/* Lien « Aller au contenu » : caché au-dessus de l'écran, il apparaît quand on le sélectionne au clavier. */
 .skip {
   position: absolute;
   left: var(--gutter);
@@ -83,6 +92,7 @@ a { color: inherit; }
 .section { padding: clamp(4.5rem, 10vw, 8rem) var(--gutter); }
 .section__inner { max-width: var(--max); margin: 0 auto; }
 
+/* Gros titres des sections. clamp(minimum, idéal, maximum) : la taille s'adapte à l'écran. */
 .title {
   margin: 0;
   max-width: 18ch;
@@ -105,6 +115,7 @@ a { color: inherit; }
   color: var(--muted);
 }
 
+/* Bouton plein (ex. « Voir mes compétences »). */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -118,6 +129,7 @@ a { color: inherit; }
 }
 .btn:hover { background: var(--accent); }
 
+/* Lien souligné (ex. « Me contacter »). */
 .link {
   font-weight: 600;
   text-decoration: underline;
@@ -130,6 +142,7 @@ a { color: inherit; }
 
 /* ---------- Écran de chargement ---------- */
 
+/* Caché par défaut : il ne s'affiche que si JavaScript et GSAP fonctionnent (règle suivante). */
 .loader { display: none; }
 
 .js:not(.no-motion) .loader {
@@ -145,6 +158,7 @@ a { color: inherit; }
   background: var(--pipe-bg);
   color: var(--pipe-ink);
 }
+/* Pendant le chargement, on bloque le défilement. */
 html.is-loading { overflow: hidden; }
 
 .loader__name {
@@ -173,6 +187,7 @@ html.is-loading { overflow: hidden; }
 @keyframes logo-pop { to { transform: scale(1); } }
 .loader__role { margin: .15rem 0 0; color: var(--pipe-muted); font-size: .95rem; }
 
+/* Gros compteur de 0 à 100 %. */
 .loader__count {
   display: flex;
   align-items: flex-start;
@@ -189,6 +204,7 @@ html.is-loading { overflow: hidden; }
   font-size: .28em;
   color: var(--pipe-accent);
 }
+/* Barre de progression : script.js agrandit .loader__fill (scaleX de 0 à 1). */
 .loader__bar {
   height: 2px;
   margin-top: 1.75rem;
@@ -204,6 +220,7 @@ html.is-loading { overflow: hidden; }
 
 /* ---------- Navigation ---------- */
 
+/* Barre du haut posée sur la page (position: absolute) : elle ne suit pas le défilement. */
 .nav {
   position: absolute;
   inset: 0 0 auto 0;
@@ -242,14 +259,43 @@ html.is-loading { overflow: hidden; }
   list-style: none;
 }
 .nav__links a {
+  position: relative;
+  display: inline-block;
+  padding: .45rem 0;
   text-decoration: none;
   color: var(--muted);
   transition: color .2s ease;
 }
-.nav__links a:hover { color: var(--ink); }
+.nav__links a:hover,
+.nav__links a:focus-visible { color: var(--ink); }
+
+/* Survol : deux traits orange, un en haut et un en bas, qui se dessinent en sens inverse.
+   Le trait du haut part de la gauche, celui du bas part de la droite. */
+.nav__links a::before,
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform .35s cubic-bezier(.65, 0, .35, 1);
+}
+.nav__links a::before { top: 0; transform-origin: right center; }
+.nav__links a::after { bottom: 0; transform-origin: left center; }
+
+/* En entrant : le trait du haut avance vers la droite, celui du bas vers la gauche.
+   En sortant : ils continuent leur chemin et s'effacent du côté opposé. */
+.nav__links a:hover::before,
+.nav__links a:focus-visible::before { transform: scaleX(1); transform-origin: left center; }
+.nav__links a:hover::after,
+.nav__links a:focus-visible::after { transform: scaleX(1); transform-origin: right center; }
 
 /* ---------- Hero ---------- */
 
+/* Première section : elle prend au moins toute la hauteur de l'écran (100dvh). */
 .hero {
   min-height: 100dvh;
   padding: 6rem var(--gutter) 2.5rem;
@@ -272,13 +318,16 @@ html.is-loading { overflow: hidden; }
   line-height: .86;
   letter-spacing: -.045em;
 }
+/* Chaque ligne du nom cache ce qui dépasse (overflow) : les lettres montent depuis le bas. */
 .hero__line {
   display: block;
   overflow: hidden;
   padding: .04em 0 .06em;
 }
+/* Une lettre du nom (créée par script.js). inline-block permet de la déplacer. */
 .ch { display: inline-block; will-change: transform; }
 
+/* Bas du hero : phrase et boutons. Sur grand écran, ils passent dans la colonne de droite. */
 .hero__bottom {
   display: grid;
   gap: 1.75rem;
@@ -315,6 +364,7 @@ html.is-loading { overflow: hidden; }
 
 /* ---------- Compétences ---------- */
 
+/* Section sombre, même fond que l'écran de chargement. */
 .skills {
   background: var(--pipe-bg);
   color: var(--pipe-ink);
@@ -341,6 +391,7 @@ html.is-loading { overflow: hidden; }
   }
 }
 
+/* Un groupe : le titre à gauche et la liste de compétences à droite (sur grand écran). */
 .group {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -361,7 +412,8 @@ html.is-loading { overflow: hidden; }
 
 .techs { margin: 0; padding: 0; list-style: none; }
 
-/* Couleurs officielles des marques */
+/* Couleur de survol de chaque compétence. --brand = couleur de remplissage, --on = couleur du texte posé dessus.
+   Pour une nouvelle compétence, ajoute une ligne ici (.tech--nom). */
 .tech--html   { --brand: #E34F26; --on: #111111; }
 .tech--css    { --brand: #1572B6; --on: #FFFFFF; }
 .tech--js     { --brand: #F7DF1E; --on: #111111; }
@@ -372,6 +424,9 @@ html.is-loading { overflow: hidden; }
 /* L'IA n'a pas de marque unique : magenta, la seule teinte absente du reste du site */
 .tech--ia     { --brand: #E0449B; --on: #111111; }
 
+/* Une ligne de compétence : grille « icône | nom | pastille ».
+   isolation et overflow cachent le remplissage de couleur tant qu'on ne survole pas.
+*/
 .tech {
   position: relative;
   isolation: isolate;
@@ -391,7 +446,7 @@ html.is-loading { overflow: hidden; }
 .techs .tech:last-child { border-bottom: 0; }
 .tech:focus-visible { outline-offset: -3px; }
 
-/* Remplissage de la ligne avec la couleur de la marque */
+/* Remplissage de la ligne avec la couleur de la marque : caché (scaleY(0)), il monte au survol. */
 .tech::before {
   content: "";
   position: absolute;
@@ -506,6 +561,7 @@ html.is-loading { overflow: hidden; }
   stroke-dashoffset: 0;
 }
 .fviz__back { stroke: var(--ink); }
+/* Les points des étapes. Quand le script est prêt (.is-armed), un point non atteint devient petit et vide. */
 .fdot {
   fill: var(--accent);
   stroke: var(--accent);
@@ -514,6 +570,9 @@ html.is-loading { overflow: hidden; }
   transform-origin: center;
   transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), fill .25s ease, stroke .25s ease;
 }
+/* Le point voyageur, son halo et sa traînée : cachés tant que le script n'est pas prêt.
+   Sans JavaScript, on voit simplement le schéma complet.
+*/
 .fviz__packet,
 .fviz__halo,
 .fviz__trail { display: none; }
@@ -535,6 +594,7 @@ html.is-loading { overflow: hidden; }
 .fviz__halo.is-return { fill: var(--accent); }
 .fviz__trail { fill: var(--accent); }
 .fviz__trail.is-return { fill: var(--ink); }
+/* Anneau (onde) : invisible au repos, c'est script.js qui l'anime quand un point est atteint. */
 .fring {
   fill: none;
   stroke: var(--accent);
@@ -547,6 +607,7 @@ html.is-loading { overflow: hidden; }
 .flow__diagram.is-armed .fviz__packet,
 .flow__diagram.is-armed .fviz__halo,
 .flow__diagram.is-armed .fviz__trail { display: block; }
+/* Le halo « respire » doucement. */
 @keyframes halo { 50% { transform: scale(1.4); opacity: .06; } }
 .flow__diagram.is-armed .fdot:not(.is-on) {
   fill: var(--bg);
@@ -578,6 +639,9 @@ html.is-loading { overflow: hidden; }
   list-style: none;
   counter-reset: step;
 }
+/* Une étape (texte à droite). min-height laisse de la place pour défiler.
+   counter-increment numérote automatiquement 1, 2, 3...
+*/
 .fstep {
   counter-increment: step;
   min-height: clamp(11rem, 38vh, 19rem);
@@ -597,6 +661,7 @@ html.is-loading { overflow: hidden; }
   line-height: 1.15;
   letter-spacing: -.01em;
 }
+/* Le numéro de l'étape est généré par CSS (compteur), pas écrit dans le HTML. */
 .fstep h3::before {
   content: counter(step);
   display: block;
@@ -618,6 +683,7 @@ html.is-loading { overflow: hidden; }
   list-style: none;
   border-top: 2px solid var(--ink);
 }
+/* Une ligne de projet. Sur grand écran : 4 colonnes (titre | technologies | statut | bouton). */
 .work__row {
   display: grid;
   gap: .4rem 2rem;
@@ -699,6 +765,7 @@ html.is-loading { overflow: hidden; }
   padding: 0;
   list-style: none;
 }
+/* Boutons ronds Par mail / GitHub / WhatsApp. Au survol : ils montent et se remplissent. */
 .contact__btn {
   display: inline-flex;
   align-items: center;
@@ -745,6 +812,7 @@ html.is-loading { overflow: hidden; }
 
 /* ---------- Mouvement réduit ---------- */
 
+/* Si la personne a demandé « moins d'animations » dans son système, tout devient quasi instantané. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: .01ms !important;
