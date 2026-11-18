@@ -12,6 +12,42 @@
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
+  /* ------------------------------------------------------------
+     Bouton « retour en haut ». Placé AVANT le test de GSAP ci-dessous : il marche aussi sans GSAP et avec « mouvement réduit ».
+     Il apparaît quand on a descendu d'environ un écran (et son chevron devient double après 2 écrans), et ramène tout en haut (en douceur, sauf si la personne a demandé
+     moins d'animations dans son système).
+     ------------------------------------------------------------ */
+  function initToTop() {
+    const btn = document.querySelector('.to-top');
+    if (!btn) return;
+
+    // On ne recalcule qu'une fois par image affichée (requestAnimationFrame) : le défilement ne ralentit pas.
+    let waiting = false;
+    const update = () => {
+      waiting = false;
+      const y = window.scrollY;
+      btn.classList.toggle('is-visible', y > window.innerHeight * 0.8);
+      // Au-delà de 2 écrans de hauteur, le chevron devient double : on est loin du haut de la page.
+      btn.classList.toggle('is-double', y > window.innerHeight * 2);
+    };
+    const onScroll = () => {
+      if (!waiting) {
+        waiting = true;
+        window.requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // on remplace le saut brutal du lien par une remontée douce
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
+    });
+  }
+  initToTop();
+
   // Sans GSAP (réseau bloqué) ou avec "mouvement réduit" : tout reste visible, sans animation.
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!window.gsap || !window.ScrollTrigger || reduceMotion) {
@@ -139,6 +175,14 @@
         ease: 'power3.out',
         scrollTrigger: { trigger: group, start: 'top 82%', once: true },
       });
+      // Le nom du groupe (Interface, Serveur et données...) glisse depuis la gauche en même temps.
+      gsap.from(group.querySelector('.group__title'), {
+        autoAlpha: 0,
+        x: -24,
+        duration: 0.7,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: group, start: 'top 82%', once: true },
+      });
     });
   }
 
@@ -147,6 +191,7 @@
         scroll (aller jusqu'à la base, puis retour vers l'écran).
         Les points et les étapes s'allument à son passage.
      ------------------------------------------------------------ */
+  // Sera remplie par flowDiagram() ; degrade() l'appelle pour afficher le schéma complet, sans animation.
   let flowFinish = null;
 
   function flowDiagram() {
@@ -190,9 +235,11 @@
       );
     };
 
+    // Couleurs du site lues dans le CSS : orange pour les ondes à l'aller, couleur du texte pour l'arrivée.
     const accent = css('--accent');
     const ink = css('--ink');
     let fx = false;                               // pas d'effets pour le rendu initial
+    // Mémoire de l'état précédent : elle sert à lancer l'onde seulement au moment où un point vient d'être atteint (pas à chaque défilement).
     const wasOn = dots.map(() => false);
     let wasDone = false;
 
@@ -242,6 +289,7 @@
 
     // « Armé » : le CSS peut maintenant atténuer ce qui n'est pas encore atteint.
     wrap.classList.add('is-armed');
+    // p = progression du trajet (0 à 1). render(0) dessine l'état de départ, puis fx = true autorise les ondes.
     const state = { p: 0 };
     render(0);
     fx = true;
@@ -264,6 +312,118 @@
   }
 
   /* ------------------------------------------------------------
+     4. Révélations au défilement : les titres, les textes, les
+        projets, les boutons de contact et le pied de page
+        apparaissent quand on arrive dessus.
+        En plus : une barre de progression en haut de la page et un
+        effet de profondeur sur le nom du hero.
+     ------------------------------------------------------------ */
+
+  // Listes de ce que ces animations créent. degrade() s'en sert pour tout arrêter et tout rendre visible.
+  const revealed = [];   // les éléments cachés au départ
+  const tweens = [];     // les animations
+  const observers = [];  // les « guetteurs » qui attendent qu'un élément entre à l'écran
+
+  // Lance une animation (créée en pause) quand l'élément entre dans l'écran, une seule fois.
+  // IntersectionObserver fonctionne même pour un élément tout en bas de la page, contrairement à un départ fixe.
+  function playWhenVisible(trigger, tween, margin) {
+    if (!('IntersectionObserver' in window)) { tween.progress(1); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { tween.play(); io.disconnect(); }
+    }, { rootMargin: margin || '0px 0px -10% 0px' });
+    io.observe(trigger);
+    observers.push(io);
+  }
+
+  // Crée une animation « arrive depuis un état caché » et la déclenche quand `trigger` devient visible.
+  // clearProps efface les styles écrits par GSAP à la fin : les effets de survol du CSS reprennent la main.
+  function reveal(trigger, targets, vars, margin) {
+    const list = gsap.utils.toArray(targets);
+    if (!list.length) return;
+    revealed.push(...list);
+    const tween = gsap.from(list, { ...vars, paused: true, clearProps: 'opacity,visibility,transform' });
+    tweens.push(tween);
+    playWhenVisible(trigger, tween, margin);
+  }
+
+  // Découpe un titre en mots : <span class="word"><span class="word__in">mot</span></span>.
+  // Le cadre .word cache ce qui dépasse (voir le CSS) : chaque mot sort du bas du cadre en montant.
+  function splitWords(title) {
+    const text = title.textContent.trim();
+    // Les lecteurs d'écran lisent le titre entier ; les mots découpés leur sont cachés.
+    title.setAttribute('aria-label', text);
+    title.textContent = '';
+    const words = text.split(/\s+/);
+    words.forEach((word, i) => {
+      const outer = document.createElement('span');
+      outer.className = 'word';
+      outer.setAttribute('aria-hidden', 'true');
+      const inner = document.createElement('span');
+      inner.className = 'word__in';
+      inner.textContent = word;
+      outer.appendChild(inner);
+      title.appendChild(outer);
+      // Une espace entre les mots, pour que le texte passe à la ligne normalement.
+      if (i < words.length - 1) title.appendChild(document.createTextNode(' '));
+    });
+    return title.querySelectorAll('.word__in');
+  }
+
+  function sectionReveals() {
+    // 1) Titres de section : les mots montent l'un après l'autre.
+    gsap.utils.toArray('.title').forEach((title) => {
+      reveal(title, splitWords(title), { yPercent: 115, duration: 0.9, stagger: 0.07, ease: 'power4.out' });
+    });
+
+    // 2) Textes d'introduction : fondu avec un léger mouvement vers le haut.
+    gsap.utils.toArray('.lede, .skills__intro').forEach((el) => {
+      reveal(el, el, { autoAlpha: 0, y: 22, duration: 0.8, ease: 'power3.out' });
+    });
+
+    // 3) Projets : les lignes arrivent l'une après l'autre.
+    const list = document.querySelector('.work__list');
+    if (list) {
+      reveal(list, list.querySelectorAll('.work__row'), { autoAlpha: 0, y: 32, duration: 0.8, stagger: 0.14, ease: 'power3.out' });
+    }
+
+    // 4) Contact : les trois boutons arrivent avec un petit rebond.
+    // On anime les <li> et pas les boutons, car les boutons ont déjà une transition CSS pour leur survol.
+    const links = document.querySelector('.contact__links');
+    if (links) {
+      reveal(links, links.querySelectorAll('li'), { autoAlpha: 0, y: 36, scale: 0.92, duration: 0.8, stagger: 0.12, ease: 'back.out(1.6)' }, '0px 0px -5% 0px');
+    }
+
+    // 5) Pied de page : simple fondu.
+    const footer = document.querySelector('.footer');
+    if (footer) reveal(footer, footer, { autoAlpha: 0, y: 16, duration: 0.8, ease: 'power2.out' }, '0px');
+  }
+
+  // Barre de progression orange en haut de la page : elle se remplit pendant qu'on descend.
+  // scrub: 0.3 = elle suit le défilement avec un tout petit retard, ce qui l'adoucit.
+  function scrollProgress() {
+    const bar = document.querySelector('.progress span');
+    if (!bar) return;
+    gsap.fromTo(bar, { scaleX: 0 }, {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
+    });
+  }
+
+  // Profondeur : en descendant, le nom du hero monte un peu plus vite que la page et s'estompe.
+  // Il sert de première « couche » : le reste du hero reste en place.
+  function heroParallax() {
+    const name = document.querySelector('.hero__name');
+    if (!name) return;
+    gsap.to(name, {
+      y: () => -window.innerHeight * 0.1,
+      autoAlpha: 0.2,
+      ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
+    });
+  }
+
+  /* ------------------------------------------------------------
      Si la page est affichée dans un cadre qui ne défile pas lui-même
      (aperçu), les animations liées au scroll ne peuvent pas marcher :
      on garde l'entrée animée et le reste reste statique et lisible.
@@ -277,15 +437,24 @@
     if (degraded) return;
     degraded = true;
     ScrollTrigger.getAll().forEach((t) => t.kill(true));
-    gsap.set('.tech', { clearProps: 'all' });
+    gsap.set('.tech, .group__title', { clearProps: 'all' });
+    // On arrête les révélations et on remet tout ce qu'elles cachaient en état normal.
+    observers.forEach((o) => o.disconnect());
+    tweens.forEach((t) => t.kill());
+    if (revealed.length) gsap.set(revealed, { clearProps: 'all' });
+    gsap.set('.hero__name', { clearProps: 'all' });
     if (flowFinish) flowFinish();
   };
 
-  // Installe les animations liées au défilement (compétences et trajet).
+  // Installe les animations liées au défilement (compétences, trajet, révélations, progression et profondeur).
   const setup = () => {
     if (isFlat()) { degrade(); return; }
     skillsReveal();
     flowDiagram();
+    sectionReveals();
+    scrollProgress();
+    heroParallax();
+    // Quand la fenêtre change de taille (avec 0,3 s d'attente), on passe en mode simplifié si la page est devenue « plate ».
     let timer;
     window.addEventListener('resize', () => {
       clearTimeout(timer);

@@ -35,6 +35,10 @@
   --pad-l: max(var(--gutter), env(safe-area-inset-left, 0px));
   --pad-r: max(var(--gutter), env(safe-area-inset-right, 0px));
   --max: 80rem;
+  /* Marge latérale réelle du contenu : sur un très grand écran, le contenu est centré (largeur --max),
+     donc le menu et le pied de page doivent se décaler du même écart pour rester alignés avec lui.
+     Les % sont calculés sur la largeur de l'élément qui utilise --edge (ex. padding-inline: var(--edge)). */
+  --edge: calc(var(--gutter) + max(0px, (100% - 2 * var(--gutter) - var(--max)) / 2));
 }
 
 /* Thème sombre : activé automatiquement si l'appareil est en mode sombre. On ne change que les variables. */
@@ -54,8 +58,10 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* Empêche les téléphones d'agrandir le texte tout seuls quand on tourne l'écran. */
 html { -webkit-text-size-adjust: 100%; }
 
+/* Réglages de toute la page : fond, couleur du texte, police, taille et espacement des lignes. */
 body {
   margin: 0;
   background: var(--bg);
@@ -66,6 +72,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Les liens prennent la couleur du texte autour d'eux (pas de bleu par défaut). */
 a { color: inherit; }
 
 /* Contour orange visible quand on navigue au clavier (accessibilité). */
@@ -89,7 +96,9 @@ a { color: inherit; }
 
 /* ---------- Éléments partagés ---------- */
 
+/* Chaque grande section : un grand espace en haut et en bas, qui s'adapte à l'écran. */
 .section { padding: clamp(4.5rem, 10vw, 8rem) var(--gutter); }
+/* Contenu d'une section : largeur limitée et centré. */
 .section__inner { max-width: var(--max); margin: 0 auto; }
 
 /* Gros titres des sections. clamp(minimum, idéal, maximum) : la taille s'adapte à l'écran. */
@@ -103,12 +112,14 @@ a { color: inherit; }
   letter-spacing: -.03em;
   text-wrap: balance;
 }
+/* Variante encore plus grande, utilisée pour « Parlons de votre projet. ». */
 .title--xl {
   max-width: 14ch;
   font-size: clamp(2.75rem, 8vw, 6.5rem);
   line-height: .95;
 }
 
+/* Petit paragraphe d'introduction sous un titre, en gris. */
 .lede {
   max-width: 52ch;
   margin: 1.25rem 0 0;
@@ -127,6 +138,7 @@ a { color: inherit; }
   text-decoration: none;
   transition: background-color .2s ease;
 }
+/* Au survol, le bouton devient orange. */
 .btn:hover { background: var(--accent); }
 
 /* Lien souligné (ex. « Me contacter »). */
@@ -138,6 +150,7 @@ a { color: inherit; }
   text-decoration-color: var(--rule);
   transition: text-decoration-color .2s ease;
 }
+/* Au survol, le soulignement devient orange. */
 .link:hover { text-decoration-color: var(--accent); }
 
 /* ---------- Écran de chargement ---------- */
@@ -161,6 +174,7 @@ a { color: inherit; }
 /* Pendant le chargement, on bloque le défilement. */
 html.is-loading { overflow: hidden; }
 
+/* Logo et nom en haut à gauche de l'écran de chargement. */
 .loader__name {
   display: flex;
   align-items: center;
@@ -183,8 +197,10 @@ html.is-loading { overflow: hidden; }
   transform: scale(0);
   animation: logo-pop .35s cubic-bezier(.3, 1.6, .5, 1) .95s forwards;
 }
+/* Animations du logo : « draw » trace le trait peu à peu, « pop » fait apparaître le point en grossissant. */
 @keyframes logo-draw { to { stroke-dashoffset: 0; } }
 @keyframes logo-pop { to { transform: scale(1); } }
+/* Phrase sous le nom : « Développeur web, Abidjan ». */
 .loader__role { margin: .15rem 0 0; color: var(--pipe-muted); font-size: .95rem; }
 
 /* Gros compteur de 0 à 100 %. */
@@ -199,6 +215,7 @@ html.is-loading { overflow: hidden; }
   letter-spacing: -.05em;
   font-variant-numeric: tabular-nums;
 }
+/* Le signe % : plus petit que le nombre, en orange. */
 .loader__pct {
   margin: .12em 0 0 .08em;
   font-size: .28em;
@@ -230,9 +247,11 @@ html.is-loading { overflow: hidden; }
   align-items: center;
   justify-content: space-between;
   gap: .5rem 2rem;
-  padding: 1.5rem var(--gutter);
+  padding-block: 1.5rem;
+  padding-inline: var(--edge);
   font-size: .95rem;
 }
+/* Logo et nom à gauche de la barre du haut (un clic ramène en haut de la page). */
 .nav__brand {
   display: inline-flex;
   align-items: center;
@@ -248,9 +267,12 @@ html.is-loading { overflow: hidden; }
   height: 2rem;
   color: var(--accent);
 }
+/* Le point du logo est plein (rempli) et sans contour. */
 .logo__dot { fill: currentColor; stroke: none; }
+/* Taille et couleur du logo sur l'écran de chargement. */
 .logo--loader { width: 1.75rem; height: 1.75rem; color: var(--pipe-accent); }
 
+/* Liste des liens du menu : alignés en ligne, avec un petit espace entre eux. */
 .nav__links {
   display: flex;
   gap: .25rem 1.5rem;
@@ -258,6 +280,7 @@ html.is-loading { overflow: hidden; }
   padding: 0;
   list-style: none;
 }
+/* Un lien du menu : gris au repos, foncé au survol. Le padding laisse la place aux deux traits orange. */
 .nav__links a {
   position: relative;
   display: inline-block;
@@ -301,6 +324,7 @@ html.is-loading { overflow: hidden; }
   padding: 6rem var(--gutter) 2.5rem;
   display: flex;
 }
+/* Contenu du hero : centré et collé en bas de l'écran (justify-content: flex-end). */
 .hero__inner {
   max-width: var(--max);
   width: 100%;
@@ -310,6 +334,7 @@ html.is-loading { overflow: hidden; }
   justify-content: flex-end;
 }
 
+/* Le nom « Alan Axel » en très gros ; la taille s'adapte à la largeur ET à la hauteur de l'écran. */
 .hero__name {
   margin: 0;
   font-family: var(--font-display);
@@ -344,12 +369,14 @@ html.is-loading { overflow: hidden; }
   .hero__pitch { grid-column: 2; grid-row: 1; }
 }
 
+/* Phrase de présentation sous le nom. */
 .hero__lead {
   margin: 0 0 1.5rem;
   font-size: clamp(1.15rem, 2vw, 1.4rem);
   line-height: 1.4;
   max-width: 34ch;
 }
+/* Rangée des deux actions : bouton « Voir mes compétences » et lien « Me contacter ». */
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
@@ -369,20 +396,26 @@ html.is-loading { overflow: hidden; }
   background: var(--pipe-bg);
   color: var(--pipe-ink);
 }
+/* Dans la section sombre, le contour du clavier est orange clair pour rester bien visible. */
 .skills :focus-visible { outline-color: var(--pipe-accent); }
+/* Titre de la section compétences : un peu plus étroit que les autres. */
 .skills .title { max-width: 16ch; }
 
+/* Contenu centré de la section compétences. */
 .skills__inner { max-width: var(--max); margin: 0 auto; }
+/* En-tête de la section : titre et phrase d'introduction (côte à côte sur grand écran, voir plus bas). */
 .skills__head {
   display: grid;
   gap: 1.25rem;
   margin-bottom: 3.5rem;
 }
+/* Phrase d'introduction à côté du titre, en gris clair. */
 .skills__intro {
   margin: 0;
   max-width: 44ch;
   color: var(--pipe-muted);
 }
+/* Grand écran : le titre et la phrase d'introduction se placent côte à côte. */
 @media (min-width: 56rem) {
   .skills__head {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -399,9 +432,11 @@ html.is-loading { overflow: hidden; }
   padding-block: 2rem;
   border-top: 1px solid var(--pipe-rule);
 }
+/* Grand écran : le titre du groupe passe à gauche, la liste des compétences à droite. */
 @media (min-width: 56rem) {
   .group { grid-template-columns: 13rem minmax(0, 1fr); }
 }
+/* Nom du groupe (Interface, Serveur et données, Suivi du code...). */
 .group__title {
   margin: 0;
   font-family: var(--font-display);
@@ -410,6 +445,7 @@ html.is-loading { overflow: hidden; }
   letter-spacing: -.01em;
 }
 
+/* Liste des compétences d'un groupe, sans puces. */
 .techs { margin: 0; padding: 0; list-style: none; }
 
 /* Couleur de survol de chaque compétence. --brand = couleur de remplissage, --on = couleur du texte posé dessus.
@@ -443,7 +479,9 @@ html.is-loading { overflow: hidden; }
   border-bottom: 1px solid var(--pipe-rule);
   transition: color .3s ease;
 }
+/* Pas de trait sous la dernière ligne d'un groupe. */
 .techs .tech:last-child { border-bottom: 0; }
+/* Au clavier, le contour est dessiné à l'intérieur de la ligne pour ne pas être coupé. */
 .tech:focus-visible { outline-offset: -3px; }
 
 /* Remplissage de la ligne avec la couleur de la marque : caché (scaleY(0)), il monte au survol. */
@@ -457,11 +495,13 @@ html.is-loading { overflow: hidden; }
   transform-origin: bottom center;
   transition: transform .4s cubic-bezier(.2, .8, .2, 1);
 }
+/* Au survol (ou au clavier) : le remplissage de couleur monte et le texte change de couleur. */
 .tech:hover,
 .tech:focus-visible { color: var(--on); }
 .tech:hover::before,
 .tech:focus-visible::before { transform: scaleY(1); }
 
+/* Petit carré qui contient l'icône de la compétence. */
 .tech__icon {
   grid-area: icon;
   display: grid;
@@ -472,17 +512,22 @@ html.is-loading { overflow: hidden; }
   border-radius: .5rem;
   transition: border-color .3s ease;
 }
+/* Taille du dessin de l'icône. */
 .tech__icon svg { width: 1.5rem; height: 1.5rem; }
+/* Lettres utilisées comme icône (JS, php) quand il n'y a pas de dessin. */
 .tech__glyph {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.05rem;
   letter-spacing: -.03em;
 }
+/* « php » s'écrit en italique et en minuscules. */
 .tech__glyph--php { font-style: italic; text-transform: lowercase; }
+/* Au survol, le contour de l'icône prend la couleur du texte. */
 .tech:hover .tech__icon,
 .tech:focus-visible .tech__icon { border-color: currentColor; }
 
+/* Nom de la compétence, en grand. */
 .tech__name {
   grid-area: name;
   font-family: var(--font-display);
@@ -491,12 +536,14 @@ html.is-loading { overflow: hidden; }
   line-height: 1.1;
   letter-spacing: -.02em;
 }
+/* Courte description à côté (ou sous) le nom. */
 .tech__desc {
   grid-area: desc;
   color: var(--pipe-muted);
   font-size: .95rem;
   transition: color .3s ease;
 }
+/* Au survol, la description prend elle aussi la couleur du texte. */
 .tech:hover .tech__desc,
 .tech:focus-visible .tech__desc { color: var(--on); }
 
@@ -509,9 +556,11 @@ html.is-loading { overflow: hidden; }
   background: var(--brand);
   transition: background-color .3s ease;
 }
+/* Au survol, la pastille prend la couleur du texte (sinon elle se confondrait avec le remplissage). */
 .tech:hover .tech__dot,
 .tech:focus-visible .tech__dot { background: var(--on); }
 
+/* Grand écran : chaque ligne tient sur une seule rangée « icône | nom | description | pastille ». */
 @media (min-width: 56rem) {
   .tech {
     grid-template-columns: 2.75rem minmax(0, 12rem) minmax(0, 1fr) auto;
@@ -521,6 +570,7 @@ html.is-loading { overflow: hidden; }
 
 /* ---------- Du clic à la base de données ---------- */
 
+/* Espace sous le titre de la section « Du clic à la base de données ». */
 .flow__head { margin-bottom: 3rem; }
 
 /* Le schéma reste collé sur le côté pendant que les étapes défilent. */
@@ -530,19 +580,23 @@ html.is-loading { overflow: hidden; }
   column-gap: 1.25rem;
   align-items: start;
 }
+/* Grand écran : la colonne du schéma devient plus large pour laisser la place aux noms des étapes. */
 @media (min-width: 56rem) {
   .flow__layout { grid-template-columns: 15rem minmax(0, 1fr); column-gap: 3rem; }
 }
 
+/* Boîte du schéma : position sticky = elle reste collée en haut de l'écran pendant qu'on fait défiler les étapes à côté. */
 .fviz-wrap {
   position: sticky;
   top: calc(5.5rem + env(safe-area-inset-top, 0px));
   height: min(60vh, 20rem);
   aspect-ratio: 120 / 600;
 }
+/* Grand écran : le schéma est plus haut. */
 @media (min-width: 56rem) {
   .fviz-wrap { height: min(68vh, 32rem); }
 }
+/* Le dessin SVG remplit sa boîte ; overflow: visible laisse voir les ondes qui dépassent un peu. */
 .fviz {
   display: block;
   width: 100%;
@@ -560,6 +614,7 @@ html.is-loading { overflow: hidden; }
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
 }
+/* Le trait du retour est de la couleur du texte, pour le distinguer de l'aller (orange). */
 .fviz__back { stroke: var(--ink); }
 /* Les points des étapes. Quand le script est prêt (.is-armed), un point non atteint devient petit et vide. */
 .fdot {
@@ -576,6 +631,7 @@ html.is-loading { overflow: hidden; }
 .fviz__packet,
 .fviz__halo,
 .fviz__trail { display: none; }
+/* Le point voyageur qui parcourt le schéma pendant le défilement. */
 .fviz__packet {
   fill: var(--ink);
   stroke: var(--bg);
@@ -583,6 +639,7 @@ html.is-loading { overflow: hidden; }
   transition: fill .3s ease;
 }
 .fviz__packet.is-return { fill: var(--accent); }
+/* Le halo : un cercle pâle autour du point voyageur. */
 .fviz__halo {
   fill: var(--ink);
   opacity: .16;
@@ -592,6 +649,7 @@ html.is-loading { overflow: hidden; }
   transition: fill .3s ease;
 }
 .fviz__halo.is-return { fill: var(--accent); }
+/* La traînée : petits points derrière le point voyageur (orange à l'aller, foncés au retour). */
 .fviz__trail { fill: var(--accent); }
 .fviz__trail.is-return { fill: var(--ink); }
 /* Anneau (onde) : invisible au repos, c'est script.js qui l'anime quand un point est atteint. */
@@ -604,6 +662,7 @@ html.is-loading { overflow: hidden; }
   transform-origin: center;
   pointer-events: none;
 }
+/* Quand le script est prêt (.is-armed), on affiche le point voyageur, son halo et sa traînée. */
 .flow__diagram.is-armed .fviz__packet,
 .flow__diagram.is-armed .fviz__halo,
 .flow__diagram.is-armed .fviz__trail { display: block; }
@@ -633,6 +692,7 @@ html.is-loading { overflow: hidden; }
   .flow__diagram.is-armed .flabel:not(.is-on) { opacity: .25; transform: translateY(-50%) translateX(-.5rem); }
 }
 
+/* Liste des étapes à droite ; counter-reset remet à zéro le compteur qui numérote les étapes. */
 .fsteps {
   margin: 0;
   padding: 0;
@@ -648,11 +708,14 @@ html.is-loading { overflow: hidden; }
   padding-bottom: 2rem;
   transition: opacity .45s ease, transform .6s cubic-bezier(.2, .8, .2, 1);
 }
+/* La dernière étape (le retour) n'a pas besoin d'espace en plus pour défiler. */
 .fstep--return {
   min-height: 0;
   padding-bottom: 0;
 }
+/* Une étape pas encore atteinte est pâle et décalée vers la droite ; elle se place en s'allumant. */
 .flow__diagram.is-armed .fstep:not(.is-on) { opacity: .25; transform: translateX(1.25rem); }
+/* Titre d'une étape. */
 .fstep h3 {
   margin: 0 0 .6rem;
   font-family: var(--font-display);
@@ -671,12 +734,15 @@ html.is-loading { overflow: hidden; }
   font-size: .95rem;
   font-weight: 600;
 }
+/* Texte d'une étape, en gris. */
 .fstep p { margin: 0; max-width: 36ch; color: var(--muted); }
 
 /* ---------- Projets ---------- */
 
+/* Section Projets : un trait en haut pour la séparer de la section précédente. */
 .work { border-top: 1px solid var(--rule); }
 
+/* Liste des projets, avec un trait épais en haut. */
 .work__list {
   margin: 3.5rem 0 0;
   padding: 0;
@@ -691,7 +757,9 @@ html.is-loading { overflow: hidden; }
   border-bottom: 1px solid var(--rule);
   align-items: baseline;
 }
+/* Les paragraphes d'une ligne de projet n'ont pas de marge (l'espacement vient de la grille). */
 .work__row p { margin: 0; }
+/* Nom du projet, en grand. */
 .work__title {
   margin: 0;
   font-family: var(--font-display);
@@ -701,11 +769,16 @@ html.is-loading { overflow: hidden; }
   letter-spacing: -.02em;
   transition: transform .35s cubic-bezier(.2, .8, .2, 1);
 }
+/* Au survol de la ligne, le titre glisse un peu vers la droite. */
 .work__row:hover .work__title,
 .work__row:focus-within .work__title { transform: translateX(.6rem); }
+/* Technologies utilisées, en gris. */
 .work__stack { color: var(--muted); }
+/* Statut du projet : « En ligne » ou « À venir ». */
 .work__status { color: var(--muted); font-weight: 500; }
+/* « En ligne » est en orange et en gras. */
 .work__status--live { color: var(--accent); font-weight: 600; }
+/* Bouton « Voir un aperçu » en forme de pilule. Il est grisé tant qu'il est désactivé (curseur « interdit »). */
 .work__btn {
   position: relative;
   justify-self: start;
@@ -728,6 +801,7 @@ html.is-loading { overflow: hidden; }
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
+/* Infobulle « Bientôt disponible » : le texte vient de l'attribut data-hint du bouton. Elle est cachée tant qu'on ne survole pas. */
 .work__btn::after {
   content: attr(data-hint);
   position: absolute;
@@ -745,7 +819,17 @@ html.is-loading { overflow: hidden; }
   pointer-events: none;
   transition: opacity .2s ease, transform .25s cubic-bezier(.2, .8, .2, 1);
 }
+/* Au survol, l'infobulle apparaît en glissant légèrement. */
 .work__btn:hover::after { opacity: 1; transform: none; }
+
+/* Tablette (de 40rem à 56rem) : la ligne tient sur deux colonnes.
+   À gauche le titre et les technologies, à droite le statut et le bouton. */
+@media (min-width: 40rem) and (max-width: 55.99rem) {
+  .work__row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .work__title, .work__stack { grid-column: 1; }
+  .work__status { grid-column: 2; grid-row: 1; justify-self: end; }
+  .work__btn { grid-column: 2; grid-row: 2; justify-self: end; margin-top: 0; }
+}
 
 @media (min-width: 56rem) {
   .work__row {
@@ -756,7 +840,9 @@ html.is-loading { overflow: hidden; }
 
 /* ---------- Contact ---------- */
 
+/* Section Contact : un trait en haut pour la séparer de la section précédente. */
 .contact { border-top: 1px solid var(--rule); }
+/* Rangée des trois boutons ; ils passent à la ligne suivante si l'écran est étroit. */
 .contact__links {
   display: flex;
   flex-wrap: wrap;
@@ -780,6 +866,7 @@ html.is-loading { overflow: hidden; }
   text-decoration: none;
   transition: transform .3s cubic-bezier(.2, .8, .2, 1), background-color .25s ease, color .25s ease, border-color .25s ease;
 }
+/* Icône dans le bouton, en orange. */
 .contact__icon {
   flex: none;
   width: 1.5rem;
@@ -787,28 +874,159 @@ html.is-loading { overflow: hidden; }
   color: var(--accent);
   transition: color .25s ease, transform .3s cubic-bezier(.2, .8, .2, 1);
 }
+/* Au survol (ou au clavier) : le bouton monte et se remplit de la couleur du texte. */
 .contact__btn:hover,
 .contact__btn:focus-visible {
   transform: translateY(-3px);
   background: var(--ink);
   color: var(--bg);
 }
+/* Au survol, l'icône s'incline et grossit légèrement. */
 .contact__btn:hover .contact__icon,
 .contact__btn:focus-visible .contact__icon { transform: rotate(-8deg) scale(1.1); }
 
+/* ---------- Bouton « retour en haut » ---------- */
+
+/* Rond, fixé en bas à droite (au-dessus de l'encoche ou de la barre du téléphone). Fond orange : il se voit aussi bien
+   sur les sections claires que sur la section sombre des compétences. Sous l'écran de chargement (z-index 100). */
+.to-top {
+  position: fixed;
+  right: var(--pad-r);
+  bottom: max(1.25rem, calc(env(safe-area-inset-bottom, 0px) + .75rem));
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden; /* l'icône qui sort du rond (animation au survol) est coupée au bord */
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .3s ease, transform .3s ease, visibility 0s, background-color .2s ease, scale .2s ease, box-shadow .2s ease;
+}
+.to-top svg { width: 1.5rem; height: 1.5rem; }
+
+/* Deux chevrons superposés. Au départ, le 2e est caché exactement derrière le 1er. Quand le bouton a la classe is-double
+   (on a descendu de plus de 2 écrans), le 1er monte de 3,5 unités, le 2e apparaît et descend de 3,5 : les deux chevrons
+   sont empilés, centrés dans le rond. Unités = celles du dessin SVG (24 x 24), donc proportionnelles à la taille de l'icône. */
+.to-top svg path { transition: transform .35s cubic-bezier(.3, .8, .3, 1), opacity .3s ease; }
+.to-top__b { opacity: 0; }
+.to-top.is-double .to-top__a { transform: translateY(-3.5px); }
+.to-top.is-double .to-top__b { opacity: 1; transform: translateY(3.5px); }
+
+/* Animation de l'icône (un ou deux chevrons) : elle file vers le haut et sort du rond, puis revient par le bas jusqu'au centre.
+   Elle se joue une fois à chaque survol (ou quand le bouton reçoit le focus au clavier). */
+@keyframes to-top-arrow {
+  0%   { transform: translateY(0); }
+  45%  { transform: translateY(-180%); }
+  46%  { transform: translateY(180%); }
+  100% { transform: translateY(0); }
+}
+.to-top:focus-visible svg { animation: to-top-arrow .55s ease-in-out; }
+
+/* Le survol n'existe qu'avec une souris : sur écran tactile, il resterait « collé » après un appui. */
+@media (hover: hover) {
+  .to-top:hover {
+    background: var(--ink);
+    scale: 1.08;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .34);
+  }
+  .to-top:hover svg { animation: to-top-arrow .55s ease-in-out; }
+}
+/* Appui (souris ou doigt) : le bouton se tasse un peu, pour sentir qu'il a réagi. */
+.to-top:active { scale: .94; }
+
+/* Avec JavaScript : caché tant qu'on est en haut de la page, puis il apparaît (classe is-visible ajoutée par script.js).
+   visibility attend la fin du fondu pour se masquer : caché, il n'est plus atteignable au clavier. */
+.js .to-top {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(.75rem);
+  transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s, background-color .2s ease, scale .2s ease, box-shadow .2s ease;
+}
+.js .to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .3s ease, transform .3s ease, visibility 0s, background-color .2s ease, scale .2s ease, box-shadow .2s ease;
+}
+
 /* ---------- Pied de page ---------- */
 
+/* Pied de page : deux textes, un à gauche et un à droite (ils passent l'un sous l'autre sur petit écran). */
 .footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: .5rem 2rem;
-  padding: 2rem var(--gutter);
+  padding-block: 2rem;
+  padding-inline: var(--edge);
   border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: .9rem;
 }
+/* Pas de marge autour des textes du pied de page. */
 .footer p { margin: 0; }
+/* Sur écran large, le texte de droite se trouve sur la même ligne que le bouton « retour en haut » (3 rem + 1,25 rem d'espace) :
+   on laisse la place pour qu'il ne le recouvre pas quand on est tout en bas. Sur téléphone, le texte est à gauche, rien à faire. */
+@media (min-width: 40rem) {
+  .footer { padding-right: max(var(--edge), calc(var(--pad-r) + 4.25rem)); }
+}
+
+/* ---------- Animations au défilement ---------- */
+
+/* Barre de progression : cachée sans JavaScript/GSAP. Sinon, une ligne orange fixée en haut de l'écran
+   que script.js remplit (scaleX de 0 à 1) pendant qu'on descend. */
+.progress { display: none; }
+.js:not(.no-motion) .progress {
+  display: block;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;            /* au-dessus de la page, sous l'écran de chargement (100) */
+  height: 3px;
+  pointer-events: none;   /* elle ne bloque jamais un clic */
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Mots des titres (créés par script.js). Le cadre .word cache le mot tant qu'il est sous la ligne.
+   Le padding vertical garde la place des accents et des queues de lettres (g, p, j) pour qu'ils ne soient pas coupés ;
+   le padding horizontal évite de couper la dernière lettre (l'espacement négatif des titres la rapproche du bord).
+   Les marges négatives compensent exactement : la mise en page ne bouge pas. */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: .14em .05em;
+  margin: -.14em -.05em;
+}
+.word__in { display: inline-block; will-change: transform; }
+
+/* ---------- Adaptation aux écrans ---------- */
+
+/* Téléphone (moins de 40rem) : le logo reste en haut, les 4 liens passent sur une 2e ligne et se répartissent
+   sur toute la largeur. Sans cela, ils débordaient à 320 px de large. */
+@media (max-width: 39.99rem) {
+  .nav { padding-block: 1rem; }
+  .nav > nav { flex: 1 1 100%; }
+  .nav__links { justify-content: space-between; gap: .25rem .75rem; }
+  /* Plus de place en haut du hero : le menu est plus haut sur téléphone. */
+  .hero { padding-top: 8.5rem; }
+}
+
+/* Écran tactile : les liens et boutons font au moins 44 px de haut, la taille recommandée pour un doigt. */
+@media (pointer: coarse) {
+  .nav__brand, .work__btn { min-height: 44px; }
+  .nav__links a { display: inline-flex; align-items: center; min-height: 44px; padding-block: 0; }
+  .link { padding-block: .65rem; }
+}
 
 /* ---------- Mouvement réduit ---------- */
 
