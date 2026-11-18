@@ -2,6 +2,13 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
+  <!-- POLITIQUE DE SÉCURITÉ (CSP). Le navigateur n'accepte que :
+         - les scripts de ce site et de cdnjs.cloudflare.com (GSAP) : aucun script écrit dans le HTML ;
+         - les styles de ce site et de Google Fonts ;
+         - les polices de Google Fonts et les images de ce site.
+       Si du code étranger arrivait dans la page, il serait bloqué. Si tu ajoutes un service externe
+       (statistiques, carte...), ajoute son adresse ici, sinon le navigateur le refusera. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- GUIDE DU FICHIER
        index.html = le contenu (textes, sections). style.css = la mise en forme. script.js = les animations.
@@ -33,15 +40,22 @@
 <body id="top">
   <!-- ÉCRAN DE CHARGEMENT : logo, rôle et compteur de 0 à 100 %. Il est animé par script.js, puis il glisse vers le haut. -->
   <div class="loader" aria-hidden="true">
+    <!-- Haut de l'écran de chargement : logo animé et nom, puis le rôle. -->
     <div class="loader__top">
+      <!-- Le logo est un SVG (un dessin écrit en code) : un « A » dont la barre se termine par un point. Le même dessin sert dans le menu. -->
       <p class="loader__name"><svg class="logo logo--loader" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></p>
       <p class="loader__role">Développeur web, Abidjan</p>
     </div>
+    <!-- Bas de l'écran de chargement : gros pourcentage et barre de progression (mis à jour par script.js). -->
     <div class="loader__bottom">
       <p class="loader__count"><span class="loader__num">0</span><span class="loader__pct">%</span></p>
       <div class="loader__bar"><span class="loader__fill"></span></div>
     </div>
   </div>
+
+  <!-- BARRE DE PROGRESSION : fine ligne orange fixée en haut de l'écran, qui se remplit quand on fait défiler la page.
+       Elle est dessinée par le CSS (.progress) et pilotée par script.js (scrollProgress). -->
+  <div class="progress" aria-hidden="true"><span></span></div>
 
   <!-- Lien d'accessibilité : permet au clavier de sauter directement au contenu. -->
   <a class="skip" href="#competences">Aller au contenu</a>
@@ -49,7 +63,9 @@
   <!-- NAVIGATION : logo à gauche, liens vers les sections à droite.
        data-intro = cet élément apparaît en fondu quand la page démarre. -->
   <header class="nav" data-intro>
+    <!-- Logo et nom : un clic ramène en haut de la page. -->
     <a class="nav__brand" href="#top" aria-label="Alan Axel, retour en haut"><svg class="logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="logo__a" pathLength="1" d="M5 27 16 5l11 22"/><path class="logo__bar" pathLength="1" d="M9.4 21h6.3"/><circle class="logo__dot" cx="19.3" cy="21" r="2.4"/></svg><span>Alan Axel</span></a>
+    <!-- Les 4 liens du menu. Chaque href (#competences, #trajet...) renvoie à l'id d'une section plus bas dans la page. -->
     <nav aria-label="Navigation principale">
       <ul class="nav__links">
         <li><a href="#competences">Compétences</a></li>
@@ -71,9 +87,12 @@
           <span class="hero__line" data-split aria-hidden="true">Axel</span>
         </h1>
 
+        <!-- Bas du hero : phrase de présentation et boutons. data-intro = ils apparaissent en fondu au démarrage. -->
         <div class="hero__bottom">
           <div class="hero__pitch" data-intro>
+            <!-- Phrase d'accroche. -->
             <p class="hero__lead">Développeur web à Abidjan. Je relie ce qu'on voit à l'écran à ce qui est stocké en base de données.</p>
+            <!-- Deux actions : un bouton plein vers les compétences et un lien vers le contact. -->
             <div class="hero__actions">
               <a class="btn" href="#competences">Voir mes compétences</a>
               <a class="link" href="#contact">Me contacter</a>
@@ -86,11 +105,13 @@
     <!-- COMPÉTENCES : 4 groupes d'outils sur fond sombre. Pour ajouter une compétence, copie un bloc <li class="tech ..."> et ajoute sa couleur dans style.css (.tech--nom). -->
     <section class="skills section" id="competences" aria-labelledby="skills-title">
       <div class="skills__inner">
+        <!-- En-tête de la section : titre et phrase d'introduction. -->
         <div class="skills__head">
           <h2 class="title" id="skills-title">Les outils que j'utilise</h2>
           <p class="skills__intro">Huit outils pour construire un site du navigateur jusqu'à la base de données, garder la trace de chaque modification et gagner du temps avec l'IA.</p>
         </div>
 
+        <!-- GROUPE 1 : Interface (HTML, CSS, JavaScript). Un groupe = un titre + une liste de compétences. -->
         <div class="group">
           <h3 class="group__title">Interface</h3>
           <ul class="techs">
@@ -100,6 +121,7 @@
               <span class="tech__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
               <span class="tech__name">HTML</span>
               <span class="tech__desc">Pages structurées et accessibles.</span>
+              <!-- Pastille de couleur, toujours visible (utile sur écran tactile, où il n'y a pas de survol). -->
               <span class="tech__dot" aria-hidden="true"></span>
             </li>
             <li class="tech tech--css" tabindex="0">
@@ -108,8 +130,9 @@
               <span class="tech__desc">Mises en page responsives avec Flexbox et Grid.</span>
               <span class="tech__dot" aria-hidden="true"></span>
             </li>
+            <!-- JavaScript n'a pas de dessin : les lettres « JS » servent d'icône. -->
             <li class="tech tech--js" tabindex="0">
-       <span class="tech__icon" aria-hidden="true"><span class="tech__glyph">JS</span></span>
+              <span class="tech__icon" aria-hidden="true"><span class="tech__glyph">JS</span></span>
               <span class="tech__name">JavaScript</span>
               <span class="tech__desc">Interactions, formulaires et appels à des API.</span>
               <span class="tech__dot" aria-hidden="true"></span>
@@ -117,9 +140,11 @@
           </ul>
         </div>
 
+        <!-- GROUPE 2 : Serveur et données (PHP, SQL). -->
         <div class="group">
           <h3 class="group__title">Serveur et données</h3>
           <ul class="techs">
+            <!-- PHP n'a pas de dessin non plus : les lettres « php » servent d'icône. -->
             <li class="tech tech--php" tabindex="0">
               <span class="tech__icon" aria-hidden="true"><span class="tech__glyph tech__glyph--php">php</span></span>
               <span class="tech__name">PHP</span>
@@ -135,6 +160,7 @@
           </ul>
         </div>
 
+        <!-- GROUPE 3 : Suivi du code (Git, GitHub). -->
         <div class="group">
           <h3 class="group__title">Suivi du code</h3>
           <ul class="techs">
@@ -153,6 +179,7 @@
           </ul>
         </div>
 
+        <!-- GROUPE 4 : Intelligence artificielle (IA). Sa couleur de survol (magenta) est dans style.css, .tech--ia. -->
         <div class="group">
           <h3 class="group__title">Intelligence artificielle</h3>
           <ul class="techs">
@@ -175,8 +202,11 @@
           <p class="lede">Chaque formulaire d'un site fait le même voyage. Voici le trajet d'une donnée, aller et retour, que je construis de bout en bout.</p>
         </div>
 
+        <!-- Deux colonnes : le schéma à gauche (collé) et les étapes à droite. La classe flow__diagram permet à script.js de retrouver l'ensemble. -->
         <div class="flow__layout flow__diagram">
+          <!-- Boîte collée du schéma (position sticky dans style.css). -->
           <div class="fviz-wrap">
+            <!-- Le schéma est un SVG. role="img" et aria-label le décrivent aux lecteurs d'écran ; viewBox = ses coordonnées internes (120 de large, 600 de haut). -->
             <svg class="fviz" viewBox="0 0 120 600" role="img" aria-label="Schéma vertical : la donnée part du formulaire, passe par JavaScript puis PHP, arrive dans la base SQL, et la réponse remonte jusqu'au formulaire.">
               <!-- Le trait de l'aller (vertical) puis celui du retour (la courbe à droite).
                    pathLength="1" permet au script de les tracer progressivement. -->
@@ -211,6 +241,7 @@
 
           <!-- Les étapes, à droite : c'est ce texte qui défile pendant que le schéma reste en place. -->
           <ol class="fsteps">
+            <!-- is-on = « étape allumée ». Sans JavaScript tout reste allumé et lisible ; script.js gère ensuite l'allumage pendant le défilement. -->
             <li class="fstep is-on">
               <h3>Un formulaire</h3>
               <p>Le visiteur remplit des champs. HTML les structure, CSS les met en forme.</p>
@@ -245,11 +276,13 @@
 
         <!-- À MODIFIER : quand un projet est en ligne, change « À venir » en « En ligne » (classe work__status--live) et remplace le bouton désactivé par un lien. -->
         <ul class="work__list">
+          <!-- Projet 1 : ce portfolio, déjà en ligne. -->
           <li class="work__row">
             <h3 class="work__title">Ce portfolio</h3>
-            <p class="work__stack">HTML, CSS, JavaScript, GSAP</p>
+            <p class="work__stack">HTML, CSS, JavaScript, GSAP, Vercel</p>
             <p class="work__status work__status--live">En ligne</p>
           </li>
+          <!-- Projet 2 : le gestionnaire de tâches (PHP + SQL), à venir. -->
           <li class="work__row">
             <h3 class="work__title">Gestionnaire de tâches</h3>
             <p class="work__stack">PHP, SQL, JavaScript, GSAP</p>
@@ -258,6 +291,7 @@
                  Quand l'aperçu existe : remplace-le par <a class="work__btn" href="LIEN">Voir un aperçu</a>. -->
             <button class="work__btn" type="button" disabled aria-label="Voir un aperçu de Gestionnaire de tâches (bientôt disponible)" data-hint="Bientôt disponible">Voir un aperçu</button>
           </li>
+          <!-- Projet 3 : mini-blog avec administration, à venir. -->
           <li class="work__row">
             <h3 class="work__title">Mini-blog avec administration</h3>
             <p class="work__stack">PHP, SQL, Git</p>
@@ -274,6 +308,7 @@
         <h2 class="title title--xl" id="contact-title">Parlons de votre projet.</h2>
         <p class="lede">Une offre, une mission, une question : écrivez-moi, je réponds vite.</p>
         <!-- Le numéro WhatsApp est dans le lien wa.me ci-dessous (indicatif 225 + numéro, sans « + » ni espaces). -->
+        <!-- Trois boutons de contact : chacun est un lien <a> avec une icône SVG et un texte. -->
         <ul class="contact__links">
           <li>
             <!-- Par mail : ouvre la messagerie du visiteur. L'adresse n'est plus affichée sur la page. -->
@@ -306,6 +341,15 @@
     <p>© <span id="year">2026</span> Alan Axel. Tous droits réservés.</p>
     <p>Abidjan, Côte d'Ivoire.</p>
   </footer>
+
+  <!-- BOUTON « RETOUR EN HAUT » : rond, fixé en bas à droite. Il apparaît quand on a descendu d'un écran environ
+       et ramène en douceur tout en haut (voir script.js). href="#top" = <body id="top"> : sans JavaScript,
+       le bouton reste visible et remonte quand même, d'un coup. -->
+  <a class="to-top" href="#top" aria-label="Retour en haut de la page">
+    <!-- Tête de flèche (chevron) : un seul au départ. Un 2e chevron (to-top__b) apparaît en dessous quand on a descendu
+         de plus de 2 écrans : le bouton prend alors la classe is-double (voir script.js). -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path class="to-top__a" d="M6 15l6-6 6 6"/><path class="to-top__b" d="M6 15l6-6 6 6"/></svg>
+  </a>
 
   <!-- Scripts en bas de page : GSAP (animations), ScrollTrigger (animations au défilement), puis script.js.
        defer = chargés sans bloquer l'affichage, et exécutés dans cet ordre. -->
